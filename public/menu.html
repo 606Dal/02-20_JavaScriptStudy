@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>마스터 디테일 패턴</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .container {
+        width: 100vw;
+        height: auto;
+        display: flex;
+        position: relative;
+        transition: width 0.3s ease-in-out; /* 부드러운 전환 효과 */
+
+        /* 배경 이미지 추가 */
+        background-image: url(http://localhost/backgroundImg.jpg);
+        background-size: cover; /* 전체 배경을 덮도록 설정 */
+        background-position: center; /* 이미지를 가운데 정렬 */
+        background-repeat: no-repeat; /* 이미지 반복 없음 */
+    }
+
+    /* 📌 모바일(세로 모드)에서 전체 너비 차지 */
+    @media screen and (max-width: 768px) {
+        .container {
+            width: 100vw;
+        }
+    }
+
+    .master{
+        width: 30%;
+        height: 200vh;
+        padding: 1em;
+        background-color: #504B38;
+        text-align: center;
+    }
+
+    .menus {
+        font-size: 4vw;
+        font-weight: bold;
+        color: #fff;
+        background: linear-gradient(45deg, #EBE5C2, #B9B28A);
+        padding: 0.2em 0.5em;
+        border-radius: 12px;
+        text-align: center;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        font-family: "Arial", sans-serif;
+        letter-spacing: 0.1em;
+        white-space: nowrap;
+    }
+
+    .detail{
+        width: 70%;
+        height: 200vh;
+    }
+
+    .menuList {
+        margin-top: 5em;
+        padding: 0 0.2em;
+    }
+
+    .menuList li {
+        cursor: pointer;
+        text-align: center;
+        list-style: none;
+        width: 8vw;
+        margin: 0.5em;
+        border: 1px solid #ddd;
+        padding: 0.5em;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: inline-block;
+        word-wrap: break-word;
+        background: #f8f9fa;
+    }
+
+    .menuList li img {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+</style>
+
+<div class="container">
+    <div class="master">
+        <div class="menus">MENUS</div>
+        <div>
+            <ul class="menuList row">
+
+            </ul>
+        </div>
+    </div>
+    <div class="detail">
+        DETAIL <a href="tel:01012345678">전화 걸기</a>
+        <div>
+            TNO<input type="text" name="mno" readonly>
+        </div>
+        <div>
+            MNAME <input type="text" name="mname" readonly>
+        </div>
+        <div>
+            PRICE <input type="number" name="price" readonly>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    /* 나중에는 이게 서버에서 받아오는 정보가 됨 */
+    const menus = [
+        {mno: 1, mname: 'Americano', price:4000, img1:'1.jpg', img2:'2.jpg', cat:'coffee}'},
+        {mno: 2, mname: 'Latte', price:4500, img1:'2.jpg', img2:'2.jpg', cat:'coffee}'},
+        {mno: 3, mname: 'Chocolate Cake', price:24000, img1:'3.jpg', img2:'2.jpg', cat:'coffee}'},
+        {mno: 4, mname: 'Cheese Cake', price:7000, img1:'4.jpg', img2:'2.jpg', cat:'cake}'},
+        {mno: 5, mname: '촉촉한 초코 쿠키', price:4000, img1:'5.jpg', img2:'2.jpg', cat:'cookie}'},
+        // 자바스크립트는 마지막에 , 있어도 문제 없음.
+        {mno: 6, mname: '마들렌', price:6000, img1:'6.jpg', img2:'2.jpg', cat:'cookie}'},
+    ]
+
+        // 메뉴 리스트 출력
+    function makeMenuList() {
+        let str = '' // 내용이 계속 바뀔거니까 let
+
+        // menus.forEach()
+        for (let i = 0; i < menus.length; i++) {
+            const menu = menus[i]
+            console.dir(menu) // 객체 내부에 어떤 게 있는지
+
+            const {mno, mname, price, img1} = menu // 구조 분해 할당 문법이라고 함
+
+            console.log(mno, mname, price)
+            console.log("--------------------")
+
+            // 백킷을 쓰면 안에 변수 사용 가능. 안에 엔터해서 여러 줄도 가능.
+            str += `<li class="p-2 border rounded col" data-mno="${mno}">
+                        <img src="http://localhost/${img1}" alt="${mname}" width="50">
+                        <br>
+                        ${mno} - ${mname} <br> ${price}
+                    </li>`
+        } // end for
+
+        document.querySelector(".menuList").innerHTML = str
+
+    }
+
+    makeMenuList()
+    // 내용물이 안 바뀌는 애들 <ul> 같은, 이런 곳에 이벤트를 걸어야 함.
+    document.querySelector(".menuList").addEventListener("click", e => {
+        //console.dir(e.target) // 이벤트가 일어난 위치. 태그 알려줌.
+        const target = e.target
+
+        // 메뉴 클릭하면 번호 가져옴
+        if(!target.dataset.mno){
+            return
+        }
+
+        // li의 번호를 가져옴. 커스텀 속성으로
+        const mno = target.dataset.mno // 얘는 문자열 dom에서 찾아온 애
+
+        // Number로 숫자 타입으로 변경.
+        //const targetMenu = menus.filter( m => m.mno === Number(mno) )
+        const targetMenu = menus.findLast( m => m.mno === Number(mno) ) // 마지막 하나만 찾음
+        console.log(targetMenu)
+
+        // 메뉴 누르면 숫자 나옴. 디테일 화면에
+        //document.querySelector(".detail").innerHTML = `<h1>${targetMenu.mno}</h1>`
+        printMenu(targetMenu)
+    }, false)
+
+    const mnoInput = document.querySelector(".detail input[name='mno']")
+    const mnameInput = document.querySelector(".detail input[name='mname']")
+    const priceInput = document.querySelector(".detail input[name='price']")
+    // 메뉴 클릭하면 디테일에 띄우기
+    function printMenu(menu) {
+
+        mnoInput.value = menu.mno // setAttribute 쓰면 렌더 트리는 안 고쳐짐.
+        mnameInput.value = menu.mname
+        priceInput.value = menu.price
+
+
+    }
+
+    // li 줬는데 커스텀 속성을 줘서 li의 해당 번호를 알아오는 방법.
+
+</script>
+
+</body>
+</html>

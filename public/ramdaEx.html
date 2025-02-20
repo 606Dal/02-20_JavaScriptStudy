@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+  // p +, M -
+  function  cal(num1, num2, oper) {
+
+    if(oper === 'p') {
+      return num1 + num2
+    }
+    if(oper === 'M') {
+      return num1 - num2
+    }
+  }
+
+  function  cal(num1, num2, fn) {
+    // 내부에 몇 천줄이 있다고 가정
+      return fn(num1, num2)
+  }
+
+  // 필요할 때마다 내부를 뜯어 고치지 않고 중간에 로직을 넣어서 다양하게 사용 가능
+  calculLamda(1, 10, (a, b) => a + b)
+  calculLamda(1, 10, (a, b) => a * b)
+
+</script>
+
+</body>
+</html>

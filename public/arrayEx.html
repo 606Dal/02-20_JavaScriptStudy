@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+  let menus = [
+    {mno: 1, mname: 'Americano', price:4000, img1:'1.jpg', img2:'2.jpg', cat:'coffee}'},
+    {mno: 2, mname: 'Latte', price:4500, img1:'2.jpg', img2:'2.jpg', cat:'coffee}'},
+    {mno: 3, mname: 'Chocolate Cake', price:24000, img1:'3.jpg', img2:'2.jpg', cat:'coffee}'},
+    {mno: 4, mname: 'Cheese Cake', price:7000, img1:'4.jpg', img2:'2.jpg', cat:'cake}'},
+    {mno: 5, mname: '촉촉한 초코 쿠키', price:4000, img1:'5.jpg', img2:'2.jpg', cat:'cookie}'},
+    // 자바스크립트는 마지막에 , 있어도 문제 없음.
+    {mno: 6, mname: '마들렌', price:6000, img1:'6.jpg', img2:'2.jpg', cat:'cookie}'},
+  ]
+
+  // 추가 1. push() 2. 전개 연산자(리액트는 이거 사용)
+  const m1 = {mno: 7, mname: '휘낭시에', price:6000, img1:'6.jpg', img2:'2.jpg', cat:'cookie}'}
+
+  //menus.push(m1)
+
+  /* 전개 연산자는 스프레드 연산자라고 함. menus는 그대로 있고 2가 새로 배열 객체가 생성됨*/
+  const menus2 = [...menus, m1]
+  // 새로운 객체를 menus로 교체
+   //menus = [...menus, m1]
+
+  // 중간에 끼워 넣기(덮어 씀) / (안 덮어 씀) splice(index, 삭제할 개수, 추가할 요소)
+  // menus[1] = m1
+  // menus.splice(1, 0, m1)
+  //menus.splice(1, -1, m1) // 음수는 0이랑 같음
+
+  // 빼기 splice(index, 삭제할 개수)
+  // menus.splice(3, 1)
+
+  // mno로 빼기 => filter
+  /* 필터링하기: 참인 애들만 - 내부에 함수를 만듦. 람다는 익명 함수. 리턴이 있어야 함
+  * 참 거짓을 판단하는데 {} 이 브레이스가 없으면 무조건 리턴임. 아래에서는 무조건 true 리턴
+  * 필터를 하면 내부적으로 루프를 돌림.
+  * (함수)의 첫 번째 파라미터는 */
+  const targetNum = 5
+
+  // const result = menus.filter( (menu) => {
+  //   // == 같은지만 비교, === 타입도 비교
+  //   if(menu.mno === targetNum){
+  //     return false // 5는 필터 결과로 안 나옴.
+  //   }
+  //   return true
+  // } )
+
+  const result = menus.filter( (menu) => menu.mno !== targetNum)
+
+  console.log(result)
+
+  //console.log(menus)
+  //console.log(menus2)
+
+
+</script>
+
+</body>
+</html>

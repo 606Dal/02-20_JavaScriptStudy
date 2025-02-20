@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>메뉴 그리드</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 80px; /* 네비게이션바 높이 고려 */
+      /* 배경 이미지 추가 */
+      background-image: url(http://localhost/backgroundImg.jpg);
+      background-size: cover; /* 전체 배경을 덮도록 설정 */
+      background-position: center; /* 이미지를 가운데 정렬 */
+      background-repeat: no-repeat; /* 이미지 반복 없음 */
+    }
+
+    .navbar {
+      background-color: #504B38;
+    }
+
+    .btn-customColor {
+      background-color: #B9B28A;
+    }
+
+    .card-img-top {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- 🟢 네비게이션 바 (카테고리) -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">카테고리</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto cat">
+        <li class="nav-item"><a class="nav-link active" href="">전체</a></li>
+        <li class="nav-item"><a class="nav-link" href="CO">커피</a></li>
+        <li class="nav-item"><a class="nav-link" href="CA">케이크</a></li>
+        <li class="nav-item"><a class="nav-link" href="A">에이드</a></li>
+        <li class="nav-item"><a class="nav-link" href="D">디저트</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- 🟢 메뉴 그리드 -->
+<div class="container mt-4 menuListContainer">
+  <div class="row">
+    <!-- 메뉴 아이템 -->
+
+  </div>
+</div>
+
+<!-- 부트스트랩 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const menus = [
+    {mno:1, mname:'아메리카노', price:4000, cat:'CO', img:'1.jpg'},
+    {mno:2, mname:'라테', price:4500, cat:'CO', img:'2.jpg'},
+    {mno:3, mname:'초코케이크', price:24000, cat:'CA', img:'3.jpg'},
+    {mno:4, mname:'치즈케이크', price:8500, cat:'CA', img:'4.jpg'},
+    {mno:5, mname:'초코 쿠키', price:4000, cat:'D', img:'5.jpg'},
+    {mno:6, mname:'마들렌', price:6000, cat:'D', img:'6.jpg'},
+    {mno:7, mname:'마카롱', price:10000, cat:'D', img:'7.jpg'},
+    {mno:8, mname:'레몬에이드', price:6000, cat:'A', img:'8.jpg'}
+  ]
+
+  function filterCategory(cname){
+      // cname이 없으면 모두
+      const result = menus.filter(m => {
+        if(!cname){
+          return true
+        }
+        return m.cat === cname
+      })
+    printMenu(result)
+  }
+
+  function printMenu(arr){
+
+    const divs = arr.map(m => `
+    <div class="col-md-4 col-sm-6 mb-4">
+      <div class="card">
+        <img src="http://localhost/${m.img}" class="card-img-top" alt="음식 이미지">
+        <div class="card-body">
+          <h5 class="card-title">${m.mname}</h5>
+          <p class="card-text">${m.price}</p>
+          <button class="btn btn-customColor">자세히 보기</button>
+        </div>
+      </div>
+    </div>`).join("")
+
+    document.querySelector(".row").innerHTML = divs
+  }
+
+  filterCategory() // 모든 메뉴 출력
+
+  const navbarCollapse = new bootstrap.Collapse(document.querySelector(".navbar-collapse"), { toggle: false }); // 메뉴 창
+
+  document.querySelector(".cat").addEventListener("click", e => {
+    // a태그의 기본동작을 막음
+    e.preventDefault()
+
+    const target = e.target.closest("a")
+    if (!target) return
+
+    // 속성 가져오기 = C, D, K 등등 가져옴
+    const catName = target.getAttribute("href")
+    console.log(catName)
+
+    filterCategory(catName)
+    navbarCollapse.hide();
+
+  }, false)
+
+
+</script>
+
+
+</body>
+</html>

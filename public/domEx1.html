@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<style>
+
+    /*태그를 이용한 방법*/
+    div {
+        background-color: #747bff;
+        color: white;
+    }
+
+    #d1 {
+        background-color: burlywood;
+    }
+
+    /*클래스 이용*/
+    .card {
+        color: blue;
+    }
+    /* 태그의 속성값을 이용한 지정 */
+    input[name='fullName'] {
+        margin: 3em;
+    }
+
+    .paging {
+        max-height: 500px;
+
+    }
+
+    .hidden {
+        display: none;
+    }
+
+</style>
+
+    <div id="d1">
+        <div>AAA</div>
+    </div>
+
+    <div class="card" data-ord="1" >BBBBBBBBB</div>
+
+    <div class="card">CCCCCCCCCC</div>
+
+    <div>
+        <input type="text" name="fullName">
+    </div>
+
+    <ul class="paging">
+
+    </ul>
+
+<script>
+    /* querySelectorAll은 배열로 나옴 */
+     console.log(document.querySelector('#d1'))
+
+    /* div 밑의 div 태그 찾아가기 */
+    const d1 = document.querySelector('#d1')
+    const target = d1.querySelector("div")
+
+    const paging = document.querySelector(".paging")
+    /* li 태그를 문자열로 한 번에 만들어 넣음. ${i} EL이랑 다름 */
+    let str = ''
+    for(let i=0; i < 10; i++){
+        str += `<li>LILILLILILI ${i} </li>`
+    }
+
+    /*돔트리 갱신*/
+    paging.innerHTML = str
+
+    /* 3초 뒤에 함수 실행*/
+    setTimeout(() => {
+        console.log("AAAAAA")
+
+        paging.setAttribute("class", "paging hidden")
+    }, 3000)
+
+
+    let obj = "AAA"
+
+    // 선언 문
+    function doA() {
+
+        console.log(this)
+        doB()
+
+        console.log("AAAAAAAAAAAAAA")
+
+        // 자바스크립트는 2번 읽음. 그래서 이것도 실행은 됨.
+        console.log("++++++++++++++" + i)
+
+        function doB() {
+            console.log("DOB")
+        }
+
+        for(var i = 0; i < 10; i++) {
+            console.log(i)
+        }
+
+        // 자바스크립트는 i를 {} 밖에서도 사용 가능.
+        console.log("-----------------" + i)
+    }
+
+    obj = doA
+    doA()
+    obj()
+
+    var obj2 = {doA : doA}
+    obj
+
+</script>
+
+</body>
+</html>
