@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    // 외부 함수
+    function counter() {
+
+        let num = 1 // private 느낌인데 더 강하게 제한.
+        // 클로저
+        function inc() {
+            return num++;
+        }
+        function dec() {
+            return num--;
+        }
+        // 자바스크립트에서는 리턴 여러개 가능함. 키 - 값
+        return { inc:inc, dec:dec } // 객체 리터럴로 보면 됨
+    }
+
+    const c1 = counter() // 여기에 inc(), dec()가 2개다 있음.
+
+    const c2 = counter()
+
+    // 화면은 있다고 가정
+    console.log(c1.inc())
+    console.log(c1.inc())
+    console.log("---------------------")
+    console.log(c2.inc())
+    console.log(c2.inc())
+
+</script>
+
+</body>
+</html>

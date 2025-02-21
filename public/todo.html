@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>todo</title>
+</head>
+<body>
+
+<div>
+    <input type="text" name="title">
+    <button class="addBtn">ADD</button>
+</div>
+
+<div>
+    <ul class="todoList">
+
+    </ul>
+</div>
+
+<script type="module">
+  import TodoService from "./todo.js";
+
+  // 변하지 않는 애들은 const로 뺌.
+  const input = document.querySelector("input[name='title']")
+  const addBtn = document.querySelector(".addBtn")
+  const todoList = document.querySelector(".todoList")
+
+  // 서비스 호출
+  const service = TodoService()
+
+  // 입력 값 알아내기
+  addBtn.addEventListener("click", e => {
+    const title = input.value
+
+    const arr = service.add(title)
+
+    // 맵 사용 todo 복사본을 li로 출력
+    const liStr = arr.map( todo => `<li data-tno="${todo.tno}">${todo.tno} - ${todo.title} <button>DEL</button></li>`).join("")
+
+    todoList.innerHTML = liStr
+
+  }, false)
+
+  todoList.addEventListener("click", e => {
+
+      const target = e.target
+
+      // 이벤트 위임. li에 걸고 동작은 버튼. 태그내임은 F12에서 확인하면 대문자.
+      if(!target || target.tagName !== 'BUTTON'){
+          return
+      }
+    // li를 찾음.
+      const li = target.closest("li")
+
+      const tno = li.dataset.tno
+
+      const arr = service.remove(Number(tno))
+
+      const liStr = arr.map( todo => `<li data-tno="${todo.tno}">${todo.tno} - ${todo.title} <button>DEL</button></li>`).join("")
+
+      todoList.innerHTML = liStr
+
+  }, false)
+
+</script>
+
+</body>
+</html>
