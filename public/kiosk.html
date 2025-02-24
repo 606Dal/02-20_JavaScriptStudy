@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    .menuContainer {
+        width: 50vw;
+        height: 50vh;
+        background-color: lightblue;
+    }
+    .cartContainer {
+        width: 50vw;
+        height: 50vh;
+        background-color: lightgoldenrodyellow;
+    }
+    .outerContainer{
+        display: flex;
+    }
+</style>
+
+<!--블럭 태그 div-->
+<div class="outerContainer">
+
+    <div class="menuContainer">
+        <ul class="menuList">
+
+        </ul>
+    </div>
+
+    <div class="cartContainer">
+        <ul class="itemList">
+
+        </ul>
+        <hr>
+        <div class="totalDiv">
+
+        </div>
+
+    </div>
+</div>
+
+
+<script type="module">
+    import cart from "./cart.js";
+    import makeMenu, {getCategories} from "./menu.js"; // default가 아닐 때 {}안에 나옴. 두개면 {a, b}.
+    // import fn from "./menu.js"; -> const menuService = fn() 이렇게 이름 바꿀 수 있음.
+
+    const cartObj = cart()
+    const menuService = makeMenu()
+    const catArr = getCategories()
+    // 메뉴 목록 가져오기
+    const menuArr = menuService.getMenus()
+
+    // ul처럼 변하지 않는 애들은 상수로 잡음
+    const menuList = document.querySelector('.menuList')
+    const itemList = document.querySelector('.itemList')
+    const totalDiv = document.querySelector('.totalDiv')
+
+    // 메뉴 목록 출력
+    function printMenus(menuArr){
+        let str = '';
+
+        str = menuArr.map( menu => `<li data-mno="${menu.mno}">${menu.mname}<br>${menu.price}</li>`).join("")
+
+        menuList.innerHTML = str
+    }
+    // 장바구니 출력
+    function printCart(arr) {
+        let str = '';
+
+        let total = 0
+
+        // {}가 나오면 return이 있어야 함.
+        str = arr.map( item => {
+
+            total += item.qty * item.price
+
+            return `
+        <li data-mno="${item.mno}">
+            ${item.mname} - ${item.price} 수량: ${item.qty} - 금액: ${item.qty * item.price}
+        </li>` }).join("")
+
+        itemList.innerHTML = str
+    }
+
+    menuList.addEventListener('click', e => {
+        const target = e.target // 어디서 이벤트가 걸렸는가.
+        // li가 아니면 리턴
+        if(target.tagName !== 'LI') { return }
+
+        const mno = Number(target.dataset.mno)
+        // 번호에 해당하는 메뉴 가져옴
+        const targetMenu = menuService.getMenu(mno)
+        //console.log(targetMenu)
+
+        // 카트 -> 추가 -> 어떤 메뉴 - 수량
+        // 배열 안에 해당 메뉴가 있는지부터 확인 - 구조분해 할당 사용.
+        const currentItems = cartObj.add(targetMenu)
+
+        // 객체를 JSON 문자열로 만들기 // stringify 스트링화
+        const jsonStr = JSON.stringify(currentItems)
+        console.log(jsonStr)
+        // 문자열을 자바스크립트 객체로 만들기
+        //console.log(JSON.parse(jsonStr))
+
+        printCart(currentItems)
+    }, false)
+
+    printMenus(menuArr)
+
+</script>
+</body>
+</html>

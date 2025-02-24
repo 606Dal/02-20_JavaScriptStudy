@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<button class="btn">GET MOVIES</button>
+<ul class="movieList">
+
+</ul>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module">
+
+    document.querySelector(".btn").addEventListener("click", e => {
+        //console.log(getMovies()) // async는 무조건 Promise 나옴. 함수 반환 후에 호출한 경우.
+        getMovies().then((result => console.log(result))) // 방법 1.
+        // 방법 2. 콜백 callback
+        getMovies((titles) => {console.log(titles)}) // 파라미터가 하나만 들어가는 함수 -> fn
+
+    }, false)
+
+    //import axios from "axios";
+
+    // 비동기 함수인데 동기화 함수처럼 만드는 게 async / await
+    async function getMovies(fn) {
+        // axios.get('http://localhost:8080/hello-servlet')
+        const result = await axios.get('http://IP:8080/cinema') // api 서버 호출
+
+        const  movies = result.data.Movies.Items
+
+        const titles = movies.map( m => m.MovieNameKR)
+
+        // return titles // 반환 후 밖에서 호출 -> 하면 반환값이 promise가 됨.
+
+        fn(titles) // fn이 파라미터인데
+
+        // 비동기 데이터 처리하는 방법.
+        // axios로 호출하면 예약 발송
+        // 호충했는데 결과물이 다 오면 이걸 해달라고 then 사용. 응답이라서 res. 첫 파라미터가 결과.
+        // result.then(res => {
+        //     //console.log(res.data.Movies.Items) // 영화 데이터 받아옴
+        //     const  movies = res.data.Movies.Items
+        //
+        //     const titles = movies.map( m => m.MovieNameKR).join()
+        //
+        //     console.log(titles)
+        // })
+    }
+
+
+    //axios then 후에
+
+    console.log(result) // 얘가 먼저 log 출력 됨.
+
+  // const arr = [1,2,3,4]
+  // // 로켈스토리지 저장 키 - 값 , json 써야 함.
+  // const str = JSON.stringify(arr)
+  // localStorage.setItem("arr", str)
+
+</script>
+
+</body>
+</html>
